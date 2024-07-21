@@ -61,16 +61,16 @@
   nixpkgs.hostPlatform = "aarch64-darwin";
   nixpkgs.config.allowUnsupportedSystem = true;
 
-  security.pki.certificateFiles = [
-    "/etc/nix/ca_cert.pem"
-  ];
+#  security.pki.certificateFiles = [
+ #   "/etc/nix/ca_cert.pem"
+ # ];
 
   # Enable using touch id for sudo.
   security.pam.enableSudoTouchIdAuth = true;
 
-  users.users."tim.shilov" = {
-    name = "tim.shilov";
-    home = "/Users/tim.shilov";
+  users.users."tim" = {
+    name = "tim";
+    home = "/Users/tim";
   };
 
   homebrew = {
@@ -78,7 +78,7 @@
     caskArgs.no_quarantine = true;
     global.brewfile = true;
     onActivation = {
-      cleanup = "zap";
+      cleanup = "none";
       upgrade = true;
     };
     masApps = {

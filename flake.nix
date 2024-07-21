@@ -47,6 +47,28 @@
         ];
       };
 
+      # TODO: Refactor to avoid duplication
+      darwinConfigurations."MacBook-Pro-Tim" = nix-darwin.lib.darwinSystem {
+        system = "aarch64-darwin";
+        modules = [
+          ./modules/darwin
+          home-manager.darwinModules.home-manager
+          {
+            home-manager = {
+              useGlobalPkgs = true;
+              useUserPackages = true;
+              backupFileExtension = "backup";
+              extraSpecialArgs = { /* example: inherit catppuccin; */ };
+              verbose = true;
+              users."tim".imports = [
+                ./modules/home-manager
+                catppuccin.homeManagerModules.catppuccin
+              ];
+            };
+          }
+        ];
+      };
+
       # Expose the package set, including overlays, for convenience.
       darwinPackages = self.darwinConfigurations."client-Tim-Shilov".pkgs;
     };
