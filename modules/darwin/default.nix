@@ -16,6 +16,7 @@
   environment.systemPackages = with pkgs; [
     btop
     cargo
+    gh-ost
     fd
     gofumpt
     htop
@@ -80,10 +81,10 @@
     onActivation = {
       cleanup = "none";
       upgrade = true;
+      autoUpdate = true;
     };
     masApps = {
       "Bitwarden" = 1352778147;
-      "Ghostery – Privacy Ad Blocker" = 1436953057;
       "In Your Face" = 1476964367;
       "Sequel Ace" = 1518036000;
       "StudyCards" = 1534325530;
@@ -122,12 +123,13 @@
       "jira-cli"
       "kubectx"
       "kustomize"
-      "pam-reattach"
       "lf"
       "mas"
+      # For some reason it is installing fine manually but not via Darwin. TODO: Figure out
+      # "music-decoy"
       "ncdu"
       "neovim"
-      "ripgrep"
+      "pam-reattach"
       # { name = "sketchybar"; restart_service = "changed"; start_service = true; }
       "gnu-sed"
       "stow"

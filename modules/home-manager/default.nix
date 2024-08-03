@@ -15,6 +15,7 @@
   # environment.
   home.packages = with pkgs; [
     kondo
+    mysql84
     # # It is sometimes useful to fine-tune packages, for example, by applying
     # # overrides. You can do that directly here, just don't forget the
     # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
@@ -65,6 +66,11 @@
 
     k9s = {
       enable = true;
+      settings = {
+        k9s = {
+          ui = { crumbsless = true; logoless = true; reactive = true; };
+        };
+      };
       aliases = {
         aliases = {
           dp = "apps/v1/deployments";
@@ -87,9 +93,9 @@
           TERM = "alacritty-direct";
         };
         window = {
-          blur = true;
+          # blur = true;
           decorations = "buttonless";
-          opacity = 0.95;
+          opacity = 1;
           padding = { x = 0; y = 0; };
         };
         font = {
@@ -101,6 +107,35 @@
         };
       };
     };
+
+    wezterm = {
+      enable = true;
+      enableZshIntegration = true;
+      extraConfig = ''
+        local wezterm = require 'wezterm'
+        local config = wezterm.config_builder()
+
+        config.color_scheme = 'Catppuccin Mocha'
+        config.font_size = 18.0
+        config.font = wezterm.font {
+          family = 'JetBrainsMono Nerd Font',
+          harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' },
+        }
+        -- config.default_prog = { "tmux" }
+
+        config.enable_tab_bar = false
+        config.window_decorations = "RESIZE"
+        config.window_padding = {
+          left = 0,
+          right = 0,
+          top = 0,
+          bottom = 0,
+        }
+
+        return config
+      '';
+    };
+
     atuin = {
       enable = true;
       enableZshIntegration = true;
@@ -140,7 +175,7 @@
         gui.mouseEvents = false;
         customCommands = [
           {
-            key = "W";
+            key = "X";
             prompts = [
               {
                 type = "input";
@@ -155,6 +190,8 @@
         ];
       };
     };
+
+    ripgrep = { enable = true; };
 
     tmux = {
       enable = true;
@@ -186,7 +223,7 @@
 
       extraConfig = ''
         set -g detach-on-destroy off
-        set-option -a terminal-overrides ",alacritty:RGB"
+        set-option -sa terminal-features ',xterm-256color:RGB'
         set-option -g status-position top
 
         set-window-option -g pane-base-index 1
@@ -195,6 +232,7 @@
         # Open panes in the same directory
         bind '"' split-window -v -c "#{pane_current_path}"
         bind % split-window -h -c "#{pane_current_path}"
+
         bind-key -n C-f run-shell "sesh connect \"$(
             sesh list | fzf-tmux --ansi -p 55%,60% \
                 --no-sort --border-label ' sesh ' --prompt '⚡  ' \
@@ -206,6 +244,23 @@
                 --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
                 --bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list)'
         )\""
+
+        # Window navigation using Ctrl + number
+        bind -n S-Left  previous-window
+        bind -n S-Right next-window
+
+        # Disable wrapping of pane navigations
+        is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
+            | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
+        bind-key -n 'C-h' if-shell "$is_vim" { send-keys C-h } { if-shell -F '#{pane_at_left}'   {} { select-pane -L } }
+        bind-key -n 'C-j' if-shell "$is_vim" { send-keys C-j } { if-shell -F '#{pane_at_bottom}' {} { select-pane -D } }
+        bind-key -n 'C-k' if-shell "$is_vim" { send-keys C-k } { if-shell -F '#{pane_at_top}'    {} { select-pane -U } }
+        bind-key -n 'C-l' if-shell "$is_vim" { send-keys C-l } { if-shell -F '#{pane_at_right}'  {} { select-pane -R } }
+
+        bind-key -T copy-mode-vi 'C-h' if-shell -F '#{pane_at_left}'   {} { select-pane -L }
+        bind-key -T copy-mode-vi 'C-j' if-shell -F '#{pane_at_bottom}' {} { select-pane -D }
+        bind-key -T copy-mode-vi 'C-k' if-shell -F '#{pane_at_top}'    {} { select-pane -U }
+        bind-key -T copy-mode-vi 'C-l' if-shell -F '#{pane_at_right}'  {} { select-pane -R }
       '';
     };
 
@@ -218,12 +273,14 @@
         nixup = "pushd ~/.dotfiles; nix flake update; nixswitch; popd";
 
         cat = "bat";
+        v = "nvim";
       };
       history = {
         expireDuplicatesFirst = true;
         ignoreDups = true;
         ignoreAllDups = true;
         ignoreSpace = true;
+        share = false;
         save = 10000;
         size = 10000;
       };
