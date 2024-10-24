@@ -6,6 +6,6 @@ return {
     transparent_background = true,
   },
   config = function()
-    vim.cmd.colorscheme 'catppuccin'
+    vim.cmd.colorscheme 'nvchad'
   end,
 }

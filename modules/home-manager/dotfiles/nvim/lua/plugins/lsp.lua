@@ -105,6 +105,7 @@ return { -- LSP Configuration & Plugins
               -- for your neovim configuration.
               library = {
                 '${3rd}/luv/library',
+                                vim.fn.stdpath "data" .. "/lazy/ui/nvchad_types",
                 unpack(vim.api.nvim_get_runtime_file('', true)),
               },
               -- If lua_ls is really slow on your computer, you can try this instead:
