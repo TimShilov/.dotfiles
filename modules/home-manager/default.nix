@@ -1,6 +1,23 @@
-{ config, pkgs, ... }:
-
 {
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+{
+  imports = [
+    ./packages.nix
+    ./programs/k9s.nix
+    ./programs/lazygit.nix
+    ./programs/starship.nix
+    ./programs/taskwarrior.nix
+    ./programs/tmux
+    ./programs/zoxide.nix
+    ./programs/zsh.nix
+
+    ./services/bugwarrior.nix
+  ];
+
   # This value determines the Home Manager release that your configuration is
   # compatible with. This helps avoid breakage when a new Home Manager release
   # introduces backwards incompatible changes.
@@ -8,33 +25,55 @@
   # You should not change this value, even if you update Home Manager. If you do
   # want to update the value, then make sure to first check the Home Manager
   # release notes.
-  home.stateVersion = "23.05"; # Please read the comment before changing.
-  xdg.enable = true;
-
-  # The home.packages option allows you to install Nix packages into your
-  # environment.
-  home.packages = with pkgs; [
-    kondo
-    mysql84
-    # # It is sometimes useful to fine-tune packages, for example, by applying
-    # # overrides. You can do that directly here, just don't forget the
-    # # parentheses. Maybe you want to install Nerd Fonts with a limited number of
-    # # fonts?
-    # (pkgs.nerdfonts.override { fonts = [ "FantasqueSansMono" ]; })
-
-    # # You can also create simple shell scripts directly inside your
-    # # configuration. For example, this adds a command 'my-hello' to your
-    # # environment:
-    # (pkgs.writeShellScriptBin "my-hello" ''
-    #   echo "Hello, ${config.home.username}!"
-    # '')
-  ];
+  home.stateVersion = "24.05"; # Please read the comment before changing.
 
   home.file = {
-    # # Building this configuration will create a copy of 'dotfiles/screenrc' in
-    # # the Nix store. Activating the configuration will then make '~/.screenrc' a
-    # # symlink to the Nix store copy.
-    # ".screenrc".source = dotfiles/screenrc;
+    ".config/borders/bordersrc" = {
+      source = dotfiles/bordersrc;
+    };
+    ".aerospace.toml" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/.aerospace.toml;
+    };
+    ".config/bugwarrior/bugwarriorrc" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/bugwarrior/bugwarriorrc;
+    };
+    ".asdfrc" = {
+      source = dotfiles/.asdfrc;
+    };
+    # TODO: Find a way to make this work with relative path
+    ".config/nvim/" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/nvim;
+      recursive = true;
+    };
+    ".config/karabiner/karabiner.json" = {
+      source = dotfiles/karabiner/karabiner.json;
+    };
+    ".config/sesh/" = {
+      source = dotfiles/sesh;
+      recursive = true;
+    };
+    ".config/sketchybar/" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/sketchybar;
+      recursive = true;
+    };
+    ".config/skhd/" = {
+      enable = false;
+      source = dotfiles/skhd;
+      recursive = true;
+    };
+    ".gitconfig" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/.gitconfig;
+    };
+    ".ideavimrc" = {
+      source = dotfiles/.ideavimrc;
+    };
+    ".jqp.yaml" = {
+      source = dotfiles/.jqp.yaml;
+    };
+    # TODO: Find a way to make this work with relative path
+    ".ssh/config" = {
+      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/ssh/config;
+    };
 
     # # You can also set the file content immediately.
     # ".gradle/gradle.properties".text = ''
@@ -43,17 +82,28 @@
     # '';
   };
 
+  xdg = {
+    enable = true;
+    dataFile = {
+      "password-store/" = {
+        source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/password-store;
+        recursive = true;
+      };
+    };
+  };
+
   home.sessionVariables = {
     EDITOR = "nvim";
     PAGER = "less";
-    LANG = "en_UK.UTF-8";
+    LANG = "en_GB.UTF-8";
     KUBECONFIG = "$HOME/.kube/config";
     USE_GKE_GCLOUD_AUTH_PLUGIN = "True";
+    HOMEBREW_NO_ANALYTICS = 1;
   };
   home.sessionPath = [
     "$HOME/.grit/bin"
     "$HOME/.krew/bin"
-    "$HOME/.dotnet/tools"
+    # "$HOME/.dotnet/tools"
   ];
 
   catppuccin = {
@@ -62,78 +112,28 @@
   };
 
   programs = {
-    eza = { enable = true; enableZshIntegration = true; };
-
-    k9s = {
+    carapace = {
       enable = true;
-      settings = {
-        k9s = {
-          ui = { crumbsless = true; logoless = true; reactive = true; };
-        };
-      };
-      aliases = {
-        aliases = {
-          dp = "apps/v1/deployments";
-          sec = "v1/secrets";
-          jo = "batch/v1/jobs";
-          cr = "rbac.authorization.k8s.io/v1/clusterroles";
-          crb = "rbac.authorization.k8s.io/v1/clusterrolebindings";
-          ro = "rbac.authorization.k8s.io/v1/roles";
-          rb = "rbac.authorization.k8s.io/v1/rolebindings";
-          np = "networking.k8s.io/v1/networkpolicies";
-        };
-      };
+      enableZshIntegration = true;
     };
-
-    alacritty = {
+    direnv = {
       enable = true;
-      settings = {
-        live_config_reload = true;
-        env = {
-          TERM = "alacritty-direct";
-        };
-        window = {
-          # blur = true;
-          decorations = "buttonless";
-          opacity = 1;
-          padding = { x = 0; y = 0; };
-        };
-        font = {
-          size = 18;
-          normal = {
-            family = "JetBrainsMono Nerd Font";
-            style = "Regular";
-          };
-        };
-      };
+      enableZshIntegration = true;
+      nix-direnv.enable = true;
+      silent = true;
+    };
+    eza = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+    password-store = {
+      enable = true;
     };
 
     wezterm = {
       enable = true;
       enableZshIntegration = true;
-      extraConfig = ''
-        local wezterm = require 'wezterm'
-        local config = wezterm.config_builder()
-
-        config.color_scheme = 'Catppuccin Mocha'
-        config.font_size = 18.0
-        config.font = wezterm.font {
-          family = 'JetBrainsMono Nerd Font',
-          harfbuzz_features = { 'calt=1', 'clig=1', 'liga=1' },
-        }
-        -- config.default_prog = { "tmux" }
-
-        config.enable_tab_bar = false
-        config.window_decorations = "RESIZE"
-        config.window_padding = {
-          left = 0,
-          right = 0,
-          top = 0,
-          bottom = 0,
-        }
-
-        return config
-      '';
+      extraConfig = (builtins.readFile ./configs/wezterm.lua);
     };
 
     atuin = {
@@ -144,196 +144,45 @@
         filter_mode_shell_up_key_binding = "session";
       };
     };
-    bat = { enable = true; };
+    bat = {
+      enable = true;
+    };
     fzf = {
       enable = true;
       enableZshIntegration = true;
       defaultCommand = "rg --files --hidden";
-      defaultOptions = [ "--ansi" "--border rounded" "--reverse" ];
+      defaultOptions = [
+        "--ansi"
+        "--border rounded"
+        "--reverse"
+      ];
     };
-    zoxide = { enable = true; enableZshIntegration = true; };
-    starship = {
+    oh-my-posh = {
       enable = true;
       enableZshIntegration = true;
-      settings = {
-        format = "$directory$git_branch$git_state$git_status$nix_shell$sudo$cmd_duration$line_break$jobs$battery$character";
-        git_branch = {
-          format = "[\\($branch(:$remote_branch)\\)]($style) ";
-          symbol = " ";
-        };
-      };
+      settings = builtins.fromTOML (
+        builtins.unsafeDiscardStringContext (builtins.readFile ./configs/oh-my-posh.toml)
+      );
     };
-
-    gh = { enable = true; };
-    gh-dash = { enable = true; };
-    git = { enable = true; };
-    yazi = { enable = true; enableZshIntegration = true; };
-
-    lazygit = {
+    gh = {
       enable = true;
-      settings = {
-        gui.mouseEvents = false;
-        customCommands = [
-          {
-            key = "X";
-            prompts = [
-              {
-                type = "input";
-                title = "Commit";
-                initialValue = "";
-              }
-            ];
-            command = "git commit -m \"{{index .PromptResponses 0}}\" --no-verify";
-            context = "global";
-            subprocess = true;
-          }
-        ];
-      };
     };
-
-    ripgrep = { enable = true; };
-
-    tmux = {
+    gh-dash = {
       enable = true;
-      mouse = true;
-      baseIndex = 1;
-      clock24 = true;
-      keyMode = "vi";
-      plugins = with pkgs.tmuxPlugins;
-        [
-          sensible
-          resurrect
-          continuum
-          vim-tmux-navigator
-        ];
-      catppuccin = {
-        extraConfig = ''
-          set -g @catppuccin_icon_window_activity "󱅫"
-          set -g @catppuccin_icon_window_bell "󰂞"
-          set -g @catppuccin_icon_window_current "null"
-          set -g @catppuccin_icon_window_last "null"
-          set -g @catppuccin_icon_window_zoom "󰁌 "
-          set -g @catppuccin_status_background "default"
-          set -g @catppuccin_status_modules_right "null"
-          set -g @catppuccin_window_current_text "#W"
-          set -g @catppuccin_window_default_text "#W"
-          set -g @catppuccin_window_status_enable "yes"
-        '';
-      };
-
-      extraConfig = ''
-        set -g detach-on-destroy off
-        set-option -sa terminal-features ',xterm-256color:RGB'
-        set-option -g status-position top
-
-        set-window-option -g pane-base-index 1
-        set-option -g renumber-windows on
-
-        # Open panes in the same directory
-        bind '"' split-window -v -c "#{pane_current_path}"
-        bind % split-window -h -c "#{pane_current_path}"
-
-        bind-key -n C-f run-shell "sesh connect \"$(
-            sesh list | fzf-tmux --ansi -p 55%,60% \
-                --no-sort --border-label ' sesh ' --prompt '⚡  ' \
-                --header '  ^a all ^t tmux ^x zoxide ^d tmux kill ^f find' \
-                --bind 'tab:down,btab:up' \
-                --bind 'ctrl-a:change-prompt(⚡  )+reload(sesh list)' \
-                --bind 'ctrl-t:change-prompt(🪟  )+reload(sesh list -t)' \
-                --bind 'ctrl-x:change-prompt(📁  )+reload(sesh list -z)' \
-                --bind 'ctrl-f:change-prompt(🔎  )+reload(fd -H -d 2 -t d -E .Trash . ~)' \
-                --bind 'ctrl-d:execute(tmux kill-session -t {})+change-prompt(⚡  )+reload(sesh list)'
-        )\""
-
-        # Window navigation using Ctrl + number
-        bind -n S-Left  previous-window
-        bind -n S-Right next-window
-
-        # Disable wrapping of pane navigations
-        is_vim="ps -o state= -o comm= -t '#{pane_tty}' \
-            | grep -iqE '^[^TXZ ]+ +(\\S+\\/)?g?(view|l?n?vim?x?|fzf)(diff)?$'"
-        bind-key -n 'C-h' if-shell "$is_vim" { send-keys C-h } { if-shell -F '#{pane_at_left}'   {} { select-pane -L } }
-        bind-key -n 'C-j' if-shell "$is_vim" { send-keys C-j } { if-shell -F '#{pane_at_bottom}' {} { select-pane -D } }
-        bind-key -n 'C-k' if-shell "$is_vim" { send-keys C-k } { if-shell -F '#{pane_at_top}'    {} { select-pane -U } }
-        bind-key -n 'C-l' if-shell "$is_vim" { send-keys C-l } { if-shell -F '#{pane_at_right}'  {} { select-pane -R } }
-
-        bind-key -T copy-mode-vi 'C-h' if-shell -F '#{pane_at_left}'   {} { select-pane -L }
-        bind-key -T copy-mode-vi 'C-j' if-shell -F '#{pane_at_bottom}' {} { select-pane -D }
-        bind-key -T copy-mode-vi 'C-k' if-shell -F '#{pane_at_top}'    {} { select-pane -U }
-        bind-key -T copy-mode-vi 'C-l' if-shell -F '#{pane_at_right}'  {} { select-pane -R }
-      '';
+      catppuccin.enable = true;
     };
-
-    zsh = {
+    git = {
       enable = true;
-      autosuggestion.enable = true;
-      autocd = true;
-      shellAliases = {
-        nixswitch = "darwin-rebuild switch --flake ~/.dotfiles/.#";
-        nixup = "pushd ~/.dotfiles; nix flake update; nixswitch; popd";
-
-        cat = "bat";
-        v = "nvim";
-      };
-      history = {
-        expireDuplicatesFirst = true;
-        ignoreDups = true;
-        ignoreAllDups = true;
-        ignoreSpace = true;
-        share = false;
-        save = 10000;
-        size = 10000;
-      };
-      initExtraFirst = ''
-        source "$(brew --prefix)/share/google-cloud-sdk/path.zsh.inc"
-        source "$(brew --prefix)/share/google-cloud-sdk/completion.zsh.inc"
-
-        source <(kubectl completion zsh)
-        . /opt/homebrew/opt/asdf/libexec/asdf.sh
-      '';
-
-      initExtra = ''
-        function gc() {
-            local branches branch
-            branches=$(git branch --all | grep -v HEAD) &&
-                branch=$(echo "$branches" |
-                    fzf-tmux -d $((2 + $(wc -l <<<"$branches"))) +m) &&
-                git checkout $(echo "$branch" | sed "s/.* //" | sed "s#remotes/[^/]*/##")
-        }
-
-        function sc() {
-            if cat package.json >/dev/null 2>&1; then
-                selected_script=$(cat package.json | jq .scripts | sed '1d;$d' | fzf --cycle --height 80% --header="Press ENTER to run the script. ESC to quit.")
-
-                if [[ -n "$selected_script" ]]; then
-                    script_name=$(echo "$selected_script" | awk -F ': ' '{gsub(/"/, "", $1); print $1}' | awk '{$1=$1};1')
-
-                    print -s "npm run "$script_name
-                    npm run $script_name
-                else
-                    echo "Exit: You haven't selected any script"
-                fi
-            else
-                echo "Error: There's no package.json"
-            fi
-        }
-
-        # tabtab source for packages
-        # uninstall by removing these lines
-        [[ -f ~/.config/tabtab/zsh/__tabtab.zsh ]] && . ~/.config/tabtab/zsh/__tabtab.zsh || true
-
-        # pnpm
-        export PNPM_HOME="$HOME/Library/pnpm"
-        case ":$PATH:" in
-        *":$PNPM_HOME:"*) ;;
-        *) export PATH="$PNPM_HOME:$PATH" ;;
-        esac
-        # pnpm end
-      '';
+    };
+    yazi = {
+      enable = true;
+      enableZshIntegration = true;
+    };
+    ripgrep = {
+      enable = true;
     };
 
     # Let Home Manager install and manage itself.
     home-manager.enable = true;
   };
 }
-

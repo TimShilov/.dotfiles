@@ -2,7 +2,9 @@
   description = "System Flake";
 
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    nixpkgs = {
+      url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+    };
 
     nix-darwin = {
       url = "github:LnL7/nix-darwin";
@@ -18,12 +20,14 @@
   };
 
   outputs =
-    inputs@{ self
-    , nix-darwin
-    , catppuccin
-    , home-manager
-    , nixpkgs
-    }: {
+    inputs@{
+      self,
+      nix-darwin,
+      catppuccin,
+      home-manager,
+      nixpkgs,
+    }:
+    {
       # Build darwin flake using:
       # $ darwin-rebuild build --flake .#client-Tim-Shilov
       darwinConfigurations."client-Tim-Shilov" = nix-darwin.lib.darwinSystem {
@@ -36,7 +40,9 @@
               useGlobalPkgs = true;
               useUserPackages = true;
               backupFileExtension = "backup";
-              extraSpecialArgs = { /* example: inherit catppuccin; */ };
+              extraSpecialArgs = {
+                # example: inherit catppuccin;
+              };
               verbose = true;
               users."tim.shilov".imports = [
                 ./modules/home-manager
@@ -73,4 +79,3 @@
       darwinPackages = self.darwinConfigurations."client-Tim-Shilov".pkgs;
     };
 }
-

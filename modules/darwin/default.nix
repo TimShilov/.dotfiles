@@ -1,5 +1,5 @@
-{ pkgs, ... }: {
-
+{ pkgs, ... }:
+{
   system.defaults = {
     dock = {
       autohide = true;
@@ -7,48 +7,70 @@
       autohide-time-modifier = 0.2;
       orientation = "left";
     };
+    spaces = {
+      spans-displays = false;
+    };
     NSGlobalDomain = {
       _HIHideMenuBar = true;
     };
+    CustomUserPreferences = {
+      NSGlobalDomain = {
+        NSStatusItemSpacing = 8;
+        NSStatusItemSelectionPadding = 16;
+      };
+    };
   };
-  # List packages installed in system profile. To search by name, run:
-  # $ nix-env -qaP | grep wget
-  environment.systemPackages = with pkgs; [
-    btop
-    cargo
-    gh-ost
-    fd
-    gofumpt
-    htop
-    jq
-    jqp
-    neovim
-    sesh
-  ];
+
+  environment = {
+    # TODO: Remove when https://github.com/LnL7/nix-darwin/pull/1020 is merged
+    etc."pam.d/sudo_local".text = ''
+      # Managed by Nix Darwin
+      auth       optional       ${pkgs.pam-reattach}/lib/pam/pam_reattach.so ignore_ssh
+      auth       sufficient     pam_tid.so
+    '';
+
+    systemPackages = with pkgs; [
+      pam-reattach
+      btop
+      cargo
+      podman
+      podman-compose
+      fd
+      gh-ost
+      htop
+      jq
+      jqp
+      neovim
+      sesh
+    ];
+  };
 
   # Auto upgrade nix package and the daemon service.
-  nix.package = pkgs.nixVersions.latest;
-  nix.gc = { automatic = true; };
-  services.nix-daemon.enable = true;
-
+  nix = {
+    package = pkgs.nixVersions.latest;
+    gc.automatic = true;
+    optimise.automatic = true;
+  };
+  services = {
+    nix-daemon = {
+      enable = true;
+    };
+    jankyborders = {
+      active_color = "gradient(top_left=0xffcba6f7,bottom_right=0xfffab387)";
+      enable = true;
+      hidpi = false;
+      inactive_color = "0x00FFFFFF";
+      # TODO: Enable after updating nix-darwin
+      # order = "above";
+      style = "round";
+      width = 8.0;
+    };
+  };
   # Necessary for using flakes on this system.
   nix.settings.experimental-features = "nix-command flakes";
 
-  fonts.packages = [
-    (pkgs.nerdfonts.override {
-      fonts = [
-        "JetBrainsMono"
-      ];
-    })
-  ];
-
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
-  environment = {
-    variables = {
-      LANG = "en_UK.UTF-8";
-    };
-  };
 
   # Used for backwards compatibility, please read the changelog before changing.
   # $ darwin-rebuild changelog
@@ -86,17 +108,15 @@
     masApps = {
       "Bitwarden" = 1352778147;
       "In Your Face" = 1476964367;
-      "Sequel Ace" = 1518036000;
       "StudyCards" = 1534325530;
-      "Telegram" = 747648890;
-      "rcmd" = 1596283165;
     };
     casks = [
       "aerospace"
       "arc"
-      "firefox@developer-edition"
+      "bartender"
+      "firefox"
+      "firefox@nightly"
       "gather"
-      "github"
       "google-cloud-sdk"
       "karabiner-elements"
       "macs-fan-control"
@@ -107,37 +127,23 @@
     ];
     taps = [
       "FelixKratz/formulae"
-      "ankitpokhrel/jira-cli"
       "homebrew/bundle"
       "homebrew/services"
       "nikitabobko/tap"
     ];
     brews = [
-      "asdf"
-      "borders"
-      "fd"
-      "gofumpt"
-      "golangci-lint"
+      "bitwarden-cli"
       "helm"
-      "htop"
-      "jira-cli"
-      "kubectx"
-      "kustomize"
-      "lf"
       "mas"
-      # For some reason it is installing fine manually but not via Darwin. TODO: Figure out
-      # "music-decoy"
       "ncdu"
-      "neovim"
-      "pam-reattach"
-      # { name = "sketchybar"; restart_service = "changed"; start_service = true; }
+      "asdf"
+      {
+        name = "sketchybar";
+        restart_service = "changed";
+        start_service = true;
+      }
       "gnu-sed"
-      "stow"
-      "temporal"
-      "tokei"
-      "tree"
       "watch"
-      "wget"
     ];
   };
 }

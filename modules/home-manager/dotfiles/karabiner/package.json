@@ -1,0 +1,16 @@
+{
+  "name": "karabiner",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "22.9.0",
+    "karabiner.ts": "1.30.1",
+    "prettier": "3.3.3",
+    "tsx": "4.19.2",
+    "typescript": "^5.6.2"
+  },
+  "scripts": {
+    "build": "tsx ./rules.ts"
+  }
+}

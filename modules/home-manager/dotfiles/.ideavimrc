@@ -1,0 +1,105 @@
+" .ideavimrc is a configuration file for ideavim plugin. it uses
+"   the same commands as the original .vimrc configuration.
+" you can find a list of commands here: https://jb.gg/h38q75
+" find more examples here: https://jb.gg/share-ideavimrc
+
+set ideajoin
+set surround
+set which-key
+set notimeout
+let g:WhichKey_ShowVimActions = "true"
+let g:qs_disable_for_diffs = 1
+let mapleader = " "
+
+" to be able to save using ':W' as well
+command W :w
+
+"" -- suggested options --
+" show a few lines of context around the cursor.
+set scrolloff=5
+
+" do incremental searching.
+set incsearch
+set showmode
+set showcmd
+
+" using vim keys for navigation in file tree
+set nerdtree
+
+" --- enable ideavim plugins https://jb.gg/ideavim-plugins
+
+" -- QuickScope plugin
+set quickscope
+
+" highlight copied text
+Plug 'machakann/vim-highlightedyank'
+" commentary plugin
+Plug 'tpope/vim-commentary'
+
+filetype plugin indent on
+
+" sane jumplist
+nnoremap <expr> j (v:count <= 1 ? 'j' : "m'" . v:count . 'j')
+nnoremap <expr> k (v:count <= 1 ? 'k' : "m'" . v:count . 'k')
+xnoremap <expr> j (v:count <= 1 ? 'j' : "m'" . v:count . 'j')
+xnoremap <expr> k (v:count <= 1 ? 'k' : "m'" . v:count . 'k')
+
+" map code action
+let g:WhichKeyDesc_Code = "<leader>ca Code"
+map <leader>ca <Action>(ShowIntentionActions)
+let g:WhichKeyDesc_quickfix = "<leader>ca Code Actions"
+
+" JSON Schema helpers
+let g:WhichKeyDesc_jsonSchemaHelpers = "<leader>j JSON Schema helpers"
+noremap <leader>jo i{oneOf:[<esc>l%a]}<esc>
+let g:WhichKeyDesc_jsonOneOf = "<leader>jo Wrap with oneOf"
+noremap <leader>ja i{anyOf:[<esc>l%a]}<esc>
+let g:WhichKeyDesc_jsonAnyOf = "<leader>ja Wrap with anyOf"
+map <leader>jc JJJJJF{f,dt}
+let g:WhichKeyDesc_jsonCleanupPrimitives = "<leader>jc Cleanup primitives"
+
+" git
+map [c <Action>(VcsShowPrevChangeMarker)
+let g:WhichKeyDesc_vcsShowPrevChangeMarker = "[c Show Previous Change"
+map ]c <Action>(VcsShowNextChangeMarker)
+let g:WhichKeyDesc_vcsShowNextChangeMarker = "]c Show Next Change"
+
+map <leader>x <Action>(SelectInProjectView)
+let g:WhichKeyDesc_selectInProjectView = "<leader>x Select In Project View"
+" map search
+map <leader>sa <Action>(GotoAction)
+let g:WhichKeyDesc_gotoAction = "<leader>sa Goto Action"
+map <leader>sf <Action>(GotoFile)
+let g:WhichKeyDesc_gotoFile = "<leader>sf Goto File"
+map <leader>sg <Action>(FindInPath)
+let g:WhichKeyDesc_findInPath = "<leader>sg Find In Path"
+map <leader>? <Action>(RecentFiles)
+let g:WhichKeyDesc_recentFiles = "<leader>? Recent Files"
+
+" diagnostics
+map ]d <Action>(GotoNextError)
+let g:WhichKeyDesc_gotoNextError = "]d Goto Next Error"
+map [d <Action>(GotoPreviousError)
+let g:WhichKeyDesc_gotoPreviousError = "[d Goto Previous Error"
+map gl <Action>(ShowErrorDescription)
+let g:WhichKeyDesc_showErrorDescription = "gl Show Error Description"
+
+" LSP actions
+map <leader>gd <Action>(GotoDeclaration)
+let g:WhichKeyDesc_gotoDeclaration = "<leader>gd Goto Declaration"
+map <leader>go <Action>(GotoTypeDeclaration)
+let g:WhichKeyDesc_gotoTypeDeclaration = "<leader>go Goto Type Declaration"
+map <leader>gi <Action>(GotoImplementation)
+let g:WhichKeyDesc_gotoImplementation = "<leader>gi Goto Implementation"
+map <leader>gr <Action>(ShowUsages)
+let g:WhichKeyDesc_showUsages = "<leader>gr Show Usages"
+map <leader>gt <Action>(GotoTest)
+let g:WhichKeyDesc_gotoTest = "<leader>gt Goto Test"
+map <leader>ff <Action>(ReformatCode)
+let g:WhichKeyDesc_reformatCode = "<leader>ff Reformat Code"
+
+" refactorings
+map <leader>rn <Action>(RenameElement)
+let g:WhichKeyDesc_renameElement = "<leader>rn Rename Element"
+map <leader>rf <Action>(RenameFile)
+let g:WhichKeyDesc_renameFile q "<leader>rf Rename File"
