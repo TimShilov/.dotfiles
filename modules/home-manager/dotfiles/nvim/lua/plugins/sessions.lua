@@ -7,5 +7,6 @@ return {
   ---@type AutoSession.Config   lazy = false,
   opts = {
     suppressed_dirs = { '~/', '~/IdeaProjects', '~/Downloads', '~/Desktop' },
+    enabled = false,
   },
 }

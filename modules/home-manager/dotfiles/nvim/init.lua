@@ -1,5 +1,8 @@
 vim.loader.enable()
 
+-- Must be set before `lazy` is loaded
+vim.g.base46_cache = vim.fn.stdpath 'data' .. '/base46_cache/'
+
 require 'options'
 require 'lazy-bootstrap'
 require 'keymaps'

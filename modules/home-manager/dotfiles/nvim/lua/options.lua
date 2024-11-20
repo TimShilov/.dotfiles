@@ -100,6 +100,3 @@ vim.filetype.add {
     ['http'] = 'http',
   },
 }
-
--- Path of NVChad UI
-vim.g.base46_cache = vim.fn.stdpath 'data' .. '/base46_cache/'

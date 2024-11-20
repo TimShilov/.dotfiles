@@ -5,7 +5,6 @@ return {
       require 'nvchad'
     end,
   },
-
   {
     'nvchad/base46',
     lazy = true,
@@ -13,4 +12,6 @@ return {
       require('base46').load_all_highlights()
     end,
   },
+  'nvchad/volt',
+  { 'nvchad/menu' },
 }
