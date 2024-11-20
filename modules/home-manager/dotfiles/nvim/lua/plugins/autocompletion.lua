@@ -29,34 +29,6 @@ local options = {
     local luasnip = require 'luasnip'
     luasnip.config.setup {}
 
-    local kind_icons = {
-      Text = '󰉿',
-      Method = 'm',
-      Function = '󰊕',
-      Constructor = '',
-      Field = '',
-      Variable = '󰆧',
-      Class = '󰌗',
-      Interface = '',
-      Module = '',
-      Property = '',
-      Unit = '',
-      Value = '󰎠',
-      Enum = '',
-      Keyword = '󰌋',
-      Snippet = '',
-      Color = '󰏘',
-      File = '󰈙',
-      Reference = '',
-      Folder = '󰉋',
-      EnumMember = '',
-      Constant = '󰇽',
-      Struct = '',
-      Event = '',
-      Operator = '󰆕',
-      TypeParameter = '󰊄',
-    }
-
     cmp.setup {
       snippet = {
         expand = function(args)
@@ -98,7 +70,10 @@ local options = {
       formatting = {
         fields = { 'kind', 'abbr', 'menu' },
         format = function(entry, vim_item)
-          vim_item.kind = string.format('%s', kind_icons[vim_item.kind])
+          local icons = require 'nvchad.icons.lspkind'
+          local icon = icons[vim_item.kind] or ''
+
+          vim_item.kind = string.format('%s', icon)
           vim_item.menu = ({
             nvim_lsp = '[LSP]',
             luasnip = '[Snippet]',
