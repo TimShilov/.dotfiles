@@ -1,10 +1,5 @@
 return {
   {
-    'echasnovski/mini.ai',
-    version = false,
-    opts = {},
-  },
-  {
     'echasnovski/mini.move',
     version = false,
     opts = {
@@ -38,7 +33,12 @@ return {
   {
     'echasnovski/mini.operators',
     version = false,
-    opts = {},
+    opts = {
+      exchange = {
+        -- 'gx' by default but it conflicts with built-in 'gx' mapping.
+        prefix = '',
+      },
+    },
   },
   {
     'echasnovski/mini.icons',

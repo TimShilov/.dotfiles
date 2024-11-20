@@ -18,7 +18,7 @@ config = {
     term = "wezterm",
     font_size = 17.0,
     font = wezterm.font({
-        family = "JetBrainsMono Nerd Font",
+        family = "JetBrainsMono NF",
         harfbuzz_features = { "calt=1", "clig=1", "liga=1" },
     }),
     window_close_confirmation = "NeverPrompt",
@@ -35,10 +35,32 @@ config = {
         -- Previous tmux session (CMD + l)
         tmuxKeymap("SUPER", "l", "L"),
 
+        -- Reload tmux config (CMD + r)
+        -- Open Lazygit (CMD + g)
+        tmuxKeymap("SUPER", "g", "g"),
+        tmuxKeymap("SUPER", "r", "r"),
+        -- Open Jira CLI (CMD + j)
+        tmuxKeymap("SUPER", "j", "j"),
+        -- Open Jira CLI - hotfixes only (CMD + J)
+        tmuxKeymap("SUPER", "J", "J"),
+        -- Open GitHub Dashboard (CMD + Shift + g)
+        tmuxKeymap("SUPER", "G", "G"),
+
+        -- Split vertically (CMD + n)
+        tmuxKeymap("SUPER", "n", "n"),
+        -- Split horizontally (CMD + Shift + n)
+        tmuxKeymap("SUPER", "N", "N"),
+
         -- New tmux window (CMD + t)
         tmuxKeymap("SUPER", "t", "c"),
         -- Close tmux window (CMD + w)
         tmuxKeymap("SUPER", "w", "&"),
+
+        -- tmux-fzf-url (CMD + u)
+        tmuxKeymap("SUPER", "u", "u"),
+
+        -- kubernetes (CMD + e)
+        tmuxKeymap("SUPER", "e", "e"),
 
         -- Zoom in tmux pane (CMD + f)
         tmuxKeymap("SUPER", "f", "z"),

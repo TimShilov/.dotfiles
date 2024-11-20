@@ -11,17 +11,17 @@ importers:
   modules/home-manager/dotfiles/karabiner:
     devDependencies:
       '@types/node':
-        specifier: 22.7.7
-        version: 22.7.7
+        specifier: 22.9.1
+        version: 22.9.1
       karabiner.ts:
-        specifier: 1.30.0
-        version: 1.30.0
+        specifier: 1.30.1
+        version: 1.30.1
       prettier:
         specifier: 3.3.3
         version: 3.3.3
       tsx:
-        specifier: 4.19.1
-        version: 4.19.1
+        specifier: 4.19.2
+        version: 4.19.2
       typescript:
         specifier: ^5.6.2
         version: 5.6.3
@@ -172,8 +172,8 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@types/node@22.7.7':
-    resolution: {integrity: sha512-SRxCrrg9CL/y54aiMCG3edPKdprgMVGDXjA3gB8UmmBW5TcXzRUYAh8EWzTnSJFAd1rgImPELza+A3bJ+qxz8Q==}
+  '@types/node@22.9.1':
+    resolution: {integrity: sha512-p8Yy/8sw1caA8CdRIQBG5tiLHmxtQKObCijiAa9Ez+d4+PRffM4054xbju0msf+cvhJpnFEeNjxmVT/0ipktrg==}
 
   esbuild@0.23.1:
     resolution: {integrity: sha512-VVNz/9Sa0bs5SELtn3f7qhJCDPCF5oMEl5cO9/SSinpE9hbPVvxbd572HH5AKiP7WD8INO53GgfDDhRjkylHEg==}
@@ -188,8 +188,8 @@ packages:
   get-tsconfig@4.8.1:
     resolution: {integrity: sha512-k9PN+cFBmaLWtVz29SkUoqU5O0slLuHJXt/2P+tMVFT+phsSGXGkp9t3rQIqdz0e+06EHNGs3oM6ZX1s2zHxRg==}
 
-  karabiner.ts@1.30.0:
-    resolution: {integrity: sha512-OYH6o8zq5172gzD0tCJNEWuIKyc16Z+3ftonvQEtYhG5FdtYTXK43J9906JJVrlWY4HfecsGTnqeFWjB7bO7Jg==}
+  karabiner.ts@1.30.1:
+    resolution: {integrity: sha512-a7TnErawJyVlq92rfczfVqU6X7Z4PLe2dnQb/VKsHcQz6N4ZXgTgDLv++7xkLAYYZ1Z3/sGFZCT8CsqZDNqf6Q==}
 
   prettier@3.3.3:
     resolution: {integrity: sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==}
@@ -199,8 +199,8 @@ packages:
   resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
 
-  tsx@4.19.1:
-    resolution: {integrity: sha512-0flMz1lh74BR4wOvBjuh9olbnwqCPc35OOlfyzHba0Dc+QNUeWX/Gq2YTbnwcWPO3BMd8fkzRVrHcsR+a7z7rA==}
+  tsx@4.19.2:
+    resolution: {integrity: sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -286,7 +286,7 @@ snapshots:
   '@esbuild/win32-x64@0.23.1':
     optional: true
 
-  '@types/node@22.7.7':
+  '@types/node@22.9.1':
     dependencies:
       undici-types: 6.19.8
 
@@ -324,13 +324,13 @@ snapshots:
     dependencies:
       resolve-pkg-maps: 1.0.0
 
-  karabiner.ts@1.30.0: {}
+  karabiner.ts@1.30.1: {}
 
   prettier@3.3.3: {}
 
   resolve-pkg-maps@1.0.0: {}
 
-  tsx@4.19.1:
+  tsx@4.19.2:
     dependencies:
       esbuild: 0.23.1
       get-tsconfig: 4.8.1

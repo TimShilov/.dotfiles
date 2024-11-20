@@ -1,9 +1,10 @@
 User tim
 SendEnv LANG
+SetEnv TERM=xterm-256color
 
 Host sentry
    HostName sentry.internal.afflu.net
-   RemoteCommand cd /opt/sentry-onpremise && sudo su
+   # RemoteCommand cd /opt/sentry-onpremise/ && sudo su; $SHELL -il
 
 Host proxy-manager
    HostName proxy-manager.internal.afflu.net

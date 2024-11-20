@@ -69,15 +69,15 @@ local options = {
         documentation = cmp.config.window.bordered(),
       },
       mapping = cmp.mapping.preset.insert {
-        ['<C-n>'] = function(fallback)
+        ['<C-n>'] = function()
           if cmp.visible() then
             cmp.select_next_item()
           else
-            fallback()
+            cmp.complete()
           end
         end,
         ['<C-p>'] = cmp.mapping.select_prev_item(), -- Select the previous item
-        ['<C-y>'] = cmp.mapping.confirm { select = true }, -- Accept the completion with Enter.
+        ['<C-y>'] = cmp.mapping.confirm { select = true },
         ['<C-l>'] = cmp.mapping(function()
           if luasnip.expand_or_locally_jumpable() then
             luasnip.expand_or_jump()

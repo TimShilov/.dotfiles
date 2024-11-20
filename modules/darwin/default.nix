@@ -11,7 +11,7 @@
       spans-displays = false;
     };
     NSGlobalDomain = {
-      _HIHideMenuBar = false;
+      _HIHideMenuBar = true;
     };
     CustomUserPreferences = {
       NSGlobalDomain = {
@@ -46,13 +46,21 @@
   };
 
   # Auto upgrade nix package and the daemon service.
-  nix.package = pkgs.nixVersions.latest;
-  nix.gc = {
-    automatic = true;
+  nix = {
+    package = pkgs.nixVersions.latest;
+    gc.automatic = true;
+    optimise.automatic = true;
   };
   services = {
     nix-daemon = {
       enable = true;
+    };
+    sketchybar = {
+      enable = true;
+      extraPackages = with pkgs; [
+        bkt
+        taskwarrior3
+      ];
     };
     jankyborders = {
       active_color = "gradient(top_left=0xffcba6f7,bottom_right=0xfffab387)";
@@ -66,9 +74,9 @@
     };
   };
   # Necessary for using flakes on this system.
-  nix.settings.experimental-features = "nix-command flakes";
-
-  fonts.packages = [ (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; }) ];
+  nix.settings = {
+    experimental-features = "nix-command flakes";
+  };
 
   # Create /etc/zshrc that loads the nix-darwin environment.
   programs.zsh.enable = true;
@@ -108,13 +116,11 @@
       "Bitwarden" = 1352778147;
       "In Your Face" = 1476964367;
       "StudyCards" = 1534325530;
-      "Telegram" = 747648890;
-      "rcmd" = 1596283165;
     };
     casks = [
       "aerospace"
       "arc"
-      "bartender"
+      "firefox"
       "firefox@nightly"
       "gather"
       "google-cloud-sdk"
@@ -124,40 +130,21 @@
       "raycast"
       "sf-symbols"
       "tableplus"
-      "thunderbird"
     ];
     taps = [
-      # "FelixKratz/formulae"
-      "ankitpokhrel/jira-cli"
       "homebrew/bundle"
       "homebrew/services"
       "nikitabobko/tap"
     ];
     brews = [
-      "asdf"
       "bitwarden-cli"
-      "fd"
       "helm"
-      "htop"
-      "jira-cli"
-      "kubectx"
-      "kustomize"
-      "lf"
+      "dhth/tap/act3"
       "mas"
       "ncdu"
-      # {
-      #   name = "sketchybar";
-      #   restart_service = "changed";
-      #   start_service = true;
-      # }
+      "asdf"
       "gnu-sed"
-      "stow"
-      "temporal"
-      "tlrc"
-      "tokei"
-      "tree"
       "watch"
-      "wget"
     ];
   };
 }
