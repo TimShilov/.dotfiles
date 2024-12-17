@@ -34,17 +34,16 @@
       source = dotfiles/bordersrc;
     };
     ".aerospace.toml" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/.aerospace.toml;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/.aerospace.toml;
     };
     ".config/bugwarrior/bugwarriorrc" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/bugwarrior/bugwarriorrc;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/bugwarrior/bugwarriorrc;
     };
     ".asdfrc" = {
       source = dotfiles/.asdfrc;
     };
-    # TODO: Find a way to make this work with relative path
     ".config/nvim/" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/nvim;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/nvim;
       recursive = true;
     };
     ".config/karabiner/karabiner.json" = {
@@ -55,7 +54,7 @@
       recursive = true;
     };
     ".config/sketchybar/" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/sketchybar;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/sketchybar;
       recursive = true;
     };
     ".config/skhd/" = {
@@ -64,7 +63,7 @@
       recursive = true;
     };
     ".gitconfig" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/.gitconfig;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/.gitconfig;
     };
     ".ideavimrc" = {
       source = dotfiles/.ideavimrc;
@@ -72,9 +71,8 @@
     ".jqp.yaml" = {
       source = dotfiles/.jqp.yaml;
     };
-    # TODO: Find a way to make this work with relative path
     ".ssh/config" = {
-      source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/modules/home-manager/dotfiles/ssh/config;
+      source = config.lib.file.mkOutOfStoreSymlink ./dotfiles/ssh/config;
     };
 
     # # You can also set the file content immediately.
@@ -88,7 +86,7 @@
     enable = true;
     dataFile = {
       "password-store/" = {
-        source = config.lib.file.mkOutOfStoreSymlink /Users/tim.shilov/dotfiles/private/modules/password-store;
+        source = config.lib.file.mkOutOfStoreSymlink ./private/modules/password-store;
         recursive = true;
       };
     };
