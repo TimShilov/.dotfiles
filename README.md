@@ -12,19 +12,6 @@ cd ~/dotfiles
 darwin-rebuild switch --flake .#client-Tim-Shilov
 ```
 
-## Brew usage
-
-```shell
-# install everything
-brew bundle
-
-# update Brewfile
-brew bundle dump
-
-# Remove what's not listed in Brewfile
-brew bundle cleanup
-```
-
 ## Requirements
 
 - [Nix](https://nixos.org/)
