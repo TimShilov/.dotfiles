@@ -18,8 +18,7 @@
 
     catppuccin.url = "github:catppuccin/nix";
 
-    # private.url = "git+ssh://git@github.com/TimShilov/dotfiles-private";
-    private.url = "git+file:///Users/tim.shilov/dotfiles/private";
+    private.url = "git+file://./private";
   };
 
   outputs =
