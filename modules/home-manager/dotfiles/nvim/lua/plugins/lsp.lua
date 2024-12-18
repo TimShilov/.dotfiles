@@ -61,6 +61,18 @@ return { -- LSP Configuration & Plugins
           command = 'silent! EslintFixAll',
           group = vim.api.nvim_create_augroup('ESlintFixAll', {}),
         })
+
+        -- Autocommand to clear existing LSP clients before re-running LSP
+        vim.api.nvim_create_autocmd('LspRestart', {
+          group = vim.api.nvim_create_augroup('LspRestartGroup', { clear = true }),
+          callback = function()
+            local clients = vim.lsp.get_active_clients()
+            for _, client in ipairs(clients) do
+              vim.lsp.stop_client(client.id)
+            end
+            vim.cmd('LspStart')
+          end,
+        })
       end,
     })
 
