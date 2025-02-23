@@ -9,7 +9,7 @@ return {
     indent = { enabled = true },
     input = { enabled = true },
     notifier = { enabled = true, top_down = false },
-    image = { enabled = false },
+    image = { enabled = true },
     picker = {
       enabled = true,
       layouts = {
@@ -26,12 +26,42 @@ return {
               { win = 'input', height = 1, border = 'bottom' },
               { win = 'list', border = 'none' },
             },
-            { win = 'preview', title = '{preview}', border = 'rounded', width = 0.5 },
+            { win = 'preview', title = '{preview}', border = 'rounded', width = 0.5, wo = { wrap = true } },
           },
         },
       },
     },
-    scratch = { enabled = true },
+    scratch = {
+      win_by_ft = {
+        typescript = {
+          keys = {
+            ['source'] = {
+              '<cr>',
+              function(self)
+                local file = vim.api.nvim_buf_get_name(self.buf)
+
+                -- TSX only accepts .ts files, not .typescript
+                local tsFile = file:gsub('%.typescript$', '.ts')
+
+                os.rename(file, tsFile)
+                local shell_command = { 'pnpm', 'tsx', tsFile }
+
+                local res = vim.system(shell_command, { text = true }):wait()
+                os.rename(tsFile, file)
+                if res.code ~= 0 then
+                  Snacks.notify.error(res.stderr or 'Unknown error.')
+                  return
+                end
+
+                Snacks.notify(res.stdout)
+              end,
+              desc = 'Run buffer',
+              mode = { 'n', 'x' },
+            },
+          },
+        },
+      },
+    },
     quickfile = { enabled = true },
     scope = { enabled = true },
     statuscolumn = { enabled = true },
@@ -299,6 +329,21 @@ return {
         Snacks.picker.undo()
       end,
       desc = 'Undo History',
+    },
+    {
+      '<leader>en',
+      function()
+        Snacks.picker.files { cwd = '~/.config/nvim' }
+      end,
+      mode = { 'n' },
+      desc = '[E]dit [N]eovim',
+    },
+    {
+      '<leader>sv',
+      function()
+        Snacks.picker.files { rtp = true }
+      end,
+      desc = 'Search Vim',
     },
 
     -- LSP

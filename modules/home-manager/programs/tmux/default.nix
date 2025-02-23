@@ -29,8 +29,8 @@ in
       fzf-tmux-url
       sensible
       vim-tmux-navigator
+      tmux-thumbs
     ];
-    terminal = "wezterm";
 
     extraConfig = (builtins.readFile ./tmux.conf);
   };
