@@ -1,35 +1,19 @@
 # My personal dotfiles
 This is a collection of my dotfiles.
 
-> [!NOTE]
-> This doc is out of date and needs to be rewritten. The repo is now using Nix-Darwin and Home Manager instead of GNU Stow.
-
 ## Usage
 
-Clone this repository to your home directory (`~/dotfiles`), then run `stow` to symlink the dotfiles you want to use.
+Clone this repository to your home directory (`~/dotfiles`), then run `darwin-rebuild` to apply the configuration.
 
-For example, to symlink the `vim` dotfiles, run:
+For example, to apply the configuration, run:
 
 ```shell
 cd ~/dotfiles
-stow zsh
-```
-
-## Brew usage
-
-```shell
-cd brew
-
-# install everything
-brew bundle
-
-# update Brewfile
-brew bundle dump
-
-# Remove what's not listed in Brewfile
-brew bundle cleanup
+darwin-rebuild switch --flake .#client-Tim-Shilov
 ```
 
 ## Requirements
 
-- [GNU Stow](https://www.gnu.org/software/stow/)
+- [Nix](https://nixos.org/)
+- [Nix-Darwin](https://github.com/LnL7/nix-darwin)
+- [Home Manager](https://github.com/nix-community/home-manager)
